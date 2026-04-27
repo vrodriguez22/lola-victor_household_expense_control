@@ -197,7 +197,7 @@ function render() {
     card.innerHTML = `
       <div class="flex justify-between items-start">
         <div>
-          <div class="font-semibold">${e.name}</div>
+          <div class="font-semibold">${e.name || 'Unnamed'}</div>
           <div class="text-xs text-gray-500">${e.date} • ${e.category || ''}</div>
         </div>
         <div class="text-right">
@@ -231,14 +231,14 @@ document.getElementById('expenseForm').addEventListener('submit', e => {
 
   const expense = {
     id: Date.now().toString(),
-    name: name.value,
-    date: date.value,
-    amount: parseFloat(amount.value),
-    method: method.value,
-    payer: payer.value,
-    split: split.value,
-    category: category.value,
-    notes: notes.value
+    name: document.getElementById('name').value || 'Unnamed',
+    date: document.getElementById('date').value,
+    amount: parseFloat(document.getElementById('amount').value),
+    method: document.getElementById('method').value,
+    payer: document.getElementById('payer').value,
+    split: document.getElementById('split').value,
+    category: document.getElementById('category').value,
+    notes: document.getElementById('notes').value
   };
 
   expenses.unshift(expense);
