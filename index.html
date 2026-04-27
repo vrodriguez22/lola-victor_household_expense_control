@@ -162,7 +162,6 @@ function renderCharts(data) {
     options: { plugins: { legend: { display: false } } }
   });
 
-  // Changed to BAR chart
   categoryChart = new Chart(document.getElementById('categoryChart'), {
     type: 'bar',
     data: { labels: c.labels, datasets: [{ data: c.values }] },
@@ -171,6 +170,14 @@ function renderCharts(data) {
       scales: { y: { beginAtZero: true } }
     }
   });
+}
+
+function deleteExpense(id) {
+  if (!confirm('Delete this expense?')) return;
+  expenses = expenses.filter(e => e.id !== id);
+  localStorage.setItem('expenses', JSON.stringify(expenses));
+  populateFilters();
+  render();
 }
 
 function render() {
@@ -188,7 +195,7 @@ function render() {
     card.className = 'bg-white border p-3 rounded-xl shadow-sm';
 
     card.innerHTML = `
-      <div class="flex justify-between">
+      <div class="flex justify-between items-start">
         <div>
           <div class="font-semibold">${e.name}</div>
           <div class="text-xs text-gray-500">${e.date} • ${e.category || ''}</div>
@@ -196,6 +203,7 @@ function render() {
         <div class="text-right">
           <div class="font-bold text-indigo-600">$${e.amount}</div>
           <div class="text-xs text-gray-500">${e.payer}</div>
+          <button onclick="deleteExpense('${e.id}')" class="text-xs text-red-500 mt-1">Delete</button>
         </div>
       </div>`;
 
@@ -222,6 +230,7 @@ document.getElementById('expenseForm').addEventListener('submit', e => {
   e.preventDefault();
 
   const expense = {
+    id: Date.now().toString(),
     name: name.value,
     date: date.value,
     amount: parseFloat(amount.value),
